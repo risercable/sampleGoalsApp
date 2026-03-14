@@ -1,6 +1,5 @@
 import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {useRef, useState} from "react";
-import { debounce } from "lodash";
 
 const Item = ({ title, color }) => (
     <View style={[styles.item, { backgroundColor: color }]}>
@@ -21,39 +20,27 @@ const pastelColors = [
 export default function App() {
   const [enteredGoalText, setEnteredGoalText] = useState('');
   const [goals, setGoals] = useState([]);
-  const inputRef = useRef(null);
   const [isDisabled, setIsDisabled] = useState(true);
   const lastColorIndex = useRef(-1);
 
-  const handler = useRef(
-      debounce((text) => {
-        console.log("Debounced:", text);
-        setEnteredGoalText(text)
-      }, 500)
-  ).current;
-
   function goalInputHandler(enteredText) {
-    handler(enteredText);
-    if (enteredText) {
-      setIsDisabled(false);
-    } else {
-      setIsDisabled(true);
-    }
+    setEnteredGoalText(enteredText);
+    setIsDisabled(!enteredText);
   }
 
   function addNewGoalHandler() {
+    if (!enteredGoalText.trim()) return;
+
     const { color, index } = getRandomColor(lastColorIndex.current);
     lastColorIndex.current = index;
 
     setGoals((currentGoals) => [
-      ...currentGoals,
-      { text: enteredGoalText, color }
+      { id: Date.now().toString(), text: enteredGoalText, color },
+      ...currentGoals
     ]);
 
-    if (inputRef.current) {
-      inputRef.current.clear();
-      setIsDisabled(true);
-    }
+    setEnteredGoalText('');
+    setIsDisabled(true);
   }
 
   function getRandomColor(lastIndex) {
@@ -70,11 +57,11 @@ export default function App() {
     <View style={styles.appContainer}>
       <View style={styles.inputContainer}>
         <TextInput
-            placeholder='Your Current Goal!'
+            placeholder="Your Current Goal!"
+            value={enteredGoalText}
             onChangeText={goalInputHandler}
             style={styles.textInput}
             onSubmitEditing={addNewGoalHandler}
-            ref={inputRef}
         />
         <TouchableOpacity
             onPress={addNewGoalHandler}
@@ -89,7 +76,7 @@ export default function App() {
       <View style={styles.goalsWrapper}>
         <FlatList  data={goals}
                    renderItem={({ item }) => <Item title={item.text} color={item.color} />}
-                   keyExtractor={(goal, index) => index} />
+                   keyExtractor={(item) => item.id} />
       </View>
     </View>
   );
