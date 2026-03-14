@@ -1,12 +1,29 @@
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {useRef, useState} from "react";
 import { debounce } from "lodash";
+
+const Item = ({ title, color }) => (
+    <View style={[styles.item, { backgroundColor: color }]}>
+      <Text style={styles.title}>{title}</Text>
+    </View>
+);
+
+const pastelColors = [
+  "#FFD6E0",
+  "#E7F3F2",
+  "#FFF3CD",
+  "#D6E4FF",
+  "#E2F0CB",
+  "#F8D7DA",
+  "#E0BBE4",
+];
 
 export default function App() {
   const [enteredGoalText, setEnteredGoalText] = useState('');
   const [goals, setGoals] = useState([]);
   const inputRef = useRef(null);
   const [isDisabled, setIsDisabled] = useState(true);
+  const lastColorIndex = useRef(-1);
 
   const handler = useRef(
       debounce((text) => {
@@ -25,12 +42,28 @@ export default function App() {
   }
 
   function addNewGoalHandler() {
-    setGoals((currentGoals) => [...currentGoals, enteredGoalText]);
-    console.log("Adding new goal :)) - ", goals.join(', '));
+    const { color, index } = getRandomColor(lastColorIndex.current);
+    lastColorIndex.current = index;
+
+    setGoals((currentGoals) => [
+      ...currentGoals,
+      { text: enteredGoalText, color }
+    ]);
+
     if (inputRef.current) {
-      inputRef.current.clear();   // clear TextInput
+      inputRef.current.clear();
       setIsDisabled(true);
     }
+  }
+
+  function getRandomColor(lastIndex) {
+    let newIndex;
+
+    do {
+      newIndex = Math.floor(Math.random() * pastelColors.length);
+    } while (newIndex === lastIndex);
+
+    return { color: pastelColors[newIndex], index: newIndex };
   }
 
   return (
@@ -54,7 +87,9 @@ export default function App() {
         </TouchableOpacity>
       </View>
       <View style={styles.goalsWrapper}>
-        {goals.map((goal, index) => (<Text>{goal}</Text>))}
+        <FlatList  data={goals}
+                   renderItem={({ item }) => <Item title={item.text} color={item.color} />}
+                   keyExtractor={(goal, index) => index} />
       </View>
     </View>
   );
@@ -109,5 +144,14 @@ const styles = StyleSheet.create({
   buttonTextDisabled: {
     fontWeight: "bold",
     color: "#4d4d4d",           // for disabled
+  },
+  item: {
+    backgroundColor: '#e7f3f2',
+    padding: 12,
+    marginVertical: 2,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 18,
   },
 })
