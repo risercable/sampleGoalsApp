@@ -148,8 +148,8 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: '#e7f3f2',
     padding: 12,
-    marginVertical: 2,
-    marginHorizontal: 16,
+    marginVertical: 8,
+    marginHorizontal: 0,
   },
   title: {
     fontSize: 18,
