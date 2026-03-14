@@ -115,9 +115,10 @@ const styles = StyleSheet.create({
     borderColor: '#cccccc',
     width: '70%',
     marginRight: 8,
+    borderRadius: 5
   },
   goalsWrapper: {
-    flex: 5
+    flex: 5,
   },
   buttonEnabled: {
     backgroundColor: "blue",
@@ -150,6 +151,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginVertical: 8,
     marginHorizontal: 0,
+    borderRadius: 5
   },
   title: {
     fontSize: 18,
