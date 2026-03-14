@@ -74,9 +74,11 @@ export default function App() {
         </TouchableOpacity>
       </View>
       <View style={styles.goalsWrapper}>
-        <FlatList  data={goals}
-                   renderItem={({ item }) => <Item title={item.text} color={item.color} />}
-                   keyExtractor={(item) => item.id} />
+        <FlatList
+            data={goals}
+            renderItem={({ item }) => <Item title={item.text} color={item.color} />}
+            keyExtractor={(item) => item.id}
+        />
       </View>
     </View>
   );
