@@ -49,8 +49,7 @@ export default function GoalInput(props) {
 const styles = StyleSheet.create({
     inputContainer: {
         flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 24,
         borderBottomWidth: 1,
@@ -66,20 +65,20 @@ const styles = StyleSheet.create({
     buttonEnabled: {
         backgroundColor: "blue",
         height: 40,                 // match TextInput height
+        width: 100,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 5,
-        flex: 2
     },
     buttonDisabled: {
         backgroundColor: "#fff",
         borderWidth: 1,
         borderColor: "#ccc",
         height: 40,                 // match TextInput height
+        width: 100,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 5,
-        flex: 2
     },
     buttonText: {
         fontWeight: "bold",
