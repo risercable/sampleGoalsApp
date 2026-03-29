@@ -1,14 +1,16 @@
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Pressable } from 'react-native';
 
-const Item = ({ title, color }) => (
-    <View style={[styles.item, { backgroundColor: color }]}>
-        <Text style={styles.title}>{title}</Text>
-    </View>
+const Item = ({ title, color, onDeleteItem }) => (
+    <Pressable onPress={onDeleteItem}>
+        <View style={[styles.item, { backgroundColor: color }]}>
+            <Text style={styles.title}>{title}</Text>
+        </View>
+    </Pressable>
 );
 
 export default function GoalItem({text, color, ...props}) {
     return (
-        <Item title={text} color={color} />
+        <Item title={text} color={color} onDeleteItem={props.onDeleteItem} />
     )
 }
 

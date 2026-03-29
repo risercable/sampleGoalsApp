@@ -17,6 +17,7 @@ const pastelColors = [
 export default function App() {
   const [goals, setGoals] = useState([]);
   const lastColorIndex = useRef(-1);
+  const [goalIndex, setGoalIndex] = useState(0);
 
   function getRandomColor(lastIndex) {
     let newIndex;
@@ -35,10 +36,16 @@ export default function App() {
     const { color, index } = getRandomColor(lastColorIndex.current);
     lastColorIndex.current = index;
 
+    setGoalIndex(oldIndex => oldIndex + 1);
+
     setGoals((currentGoals) => [
-      { id: Date.now().toString(), text: enteredGoalText, color },
+      { id: goalIndex, text: enteredGoalText, color },
       ...currentGoals
     ]);
+  }
+
+  function deleteGoalHandler(id) {
+    setGoals(goals.filter(goal => goal.id !== id));
   }
 
 
@@ -48,7 +55,13 @@ export default function App() {
       <View style={styles.goalsWrapper}>
         <FlatList
             data={goals}
-            renderItem={({ item }) => <GoalItem text={item.text} color={item.color} />}
+            renderItem={({ item }) => (
+                <GoalItem
+                    text={item.text}
+                    color={item.color}
+                    onDeleteItem={() => deleteGoalHandler(item.id)}
+                />
+            )}
             keyExtractor={(item) => item.id}
         />
       </View>
