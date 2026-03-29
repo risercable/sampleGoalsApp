@@ -1,30 +1,9 @@
 import { View, TextInput, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import {useRef, useState} from "react";
+import { useState} from "react";
 
-const pastelColors = [
-    "#FFD6E0",
-    "#E7F3F2",
-    "#FFF3CD",
-    "#D6E4FF",
-    "#E2F0CB",
-    "#F8D7DA",
-    "#E0BBE4",
-];
-
-export default function GoalInput({goals, setGoals, ...props}) {
-    const [enteredGoalText, setEnteredGoalText] = useState('');
+export default function GoalInput(props) {
     const [isDisabled, setIsDisabled] = useState(true);
-    const lastColorIndex = useRef(-1);
-
-    function getRandomColor(lastIndex) {
-        let newIndex;
-
-        do {
-            newIndex = Math.floor(Math.random() * pastelColors.length);
-        } while (newIndex === lastIndex);
-
-        return { color: pastelColors[newIndex], index: newIndex };
-    }
+    const [enteredGoalText, setEnteredGoalText] = useState('');
 
     function goalInputHandler(enteredText) {
         setEnteredGoalText(enteredText);
@@ -32,16 +11,7 @@ export default function GoalInput({goals, setGoals, ...props}) {
     }
 
     function addNewGoalHandler() {
-        if (!enteredGoalText.trim()) return;
-
-        const { color, index } = getRandomColor(lastColorIndex.current);
-        lastColorIndex.current = index;
-
-        setGoals((currentGoals) => [
-            { id: Date.now().toString(), text: enteredGoalText, color },
-            ...currentGoals
-        ]);
-
+        props.onAddGoal(enteredGoalText);
         setEnteredGoalText('');
         setIsDisabled(true);
     }

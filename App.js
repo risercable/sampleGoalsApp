@@ -1,16 +1,50 @@
 import {FlatList, StyleSheet, View} from 'react-native';
-import { useState} from "react";
+import {useRef, useState} from "react";
 import GoalItem from "./components/GoalItem";
 import GoalInput from "./components/GoalInput";
+
+const pastelColors = [
+  "#FFD6E0",
+  "#E7F3F2",
+  "#FFF3CD",
+  "#D6E4FF",
+  "#E2F0CB",
+  "#F8D7DA",
+  "#E0BBE4",
+];
 
 
 export default function App() {
   const [goals, setGoals] = useState([]);
+  const lastColorIndex = useRef(-1);
+
+  function getRandomColor(lastIndex) {
+    let newIndex;
+
+    do {
+      newIndex = Math.floor(Math.random() * pastelColors.length);
+    } while (newIndex === lastIndex);
+
+    return { color: pastelColors[newIndex], index: newIndex };
+  }
+
+
+  function addNewGoalHandler(enteredGoalText) {
+    if (!enteredGoalText.trim()) return;
+
+    const { color, index } = getRandomColor(lastColorIndex.current);
+    lastColorIndex.current = index;
+
+    setGoals((currentGoals) => [
+      { id: Date.now().toString(), text: enteredGoalText, color },
+      ...currentGoals
+    ]);
+  }
 
 
   return (
     <View style={styles.appContainer}>
-      <GoalInput goals={goals} setGoals={setGoals} />
+      <GoalInput onAddGoal={addNewGoalHandler} />
       <View style={styles.goalsWrapper}>
         <FlatList
             data={goals}
