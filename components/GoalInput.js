@@ -1,4 +1,4 @@
-import { View, TextInput, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, StyleSheet, Modal, Image } from 'react-native';
 import { useState} from "react";
 
 export default function GoalInput(props) {
@@ -17,24 +17,32 @@ export default function GoalInput(props) {
     }
 
     return (
-        <View style={styles.inputContainer}>
-            <TextInput
-                placeholder="Your Current Goal!"
-                value={enteredGoalText}
-                onChangeText={goalInputHandler}
-                style={styles.textInput}
-                onSubmitEditing={addNewGoalHandler}
-            />
+        <Modal visible={props.visible} animationType="slide">
             <TouchableOpacity
-                onPress={addNewGoalHandler}
-                disabled={isDisabled}
-                style={isDisabled ? styles.buttonDisabled : styles.buttonEnabled}
-            >
-                <Text style={isDisabled ? styles.buttonTextDisabled : styles.buttonText}>
-                    Add Goal
-                </Text>
+                onPress={() => props.setVisible(false) }>
+                <Image
+                    style={styles.modalBackIcon}
+                    source={require('../assets/back.png')} />
             </TouchableOpacity>
-        </View>
+            <View style={styles.inputContainer}>
+                <TextInput
+                    placeholder="Your Current Goal!"
+                    value={enteredGoalText}
+                    onChangeText={goalInputHandler}
+                    style={styles.textInput}
+                    onSubmitEditing={addNewGoalHandler}
+                />
+                <TouchableOpacity
+                    onPress={addNewGoalHandler}
+                    disabled={isDisabled}
+                    style={isDisabled ? styles.buttonDisabled : styles.buttonEnabled}
+                >
+                    <Text style={isDisabled ? styles.buttonTextDisabled : styles.buttonText}>
+                        Add Goal
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        </Modal>
     )
 }
 
@@ -81,4 +89,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "#4d4d4d",           // for disabled
     },
+    modalBackIcon: {
+        width: 25,
+        height: 25,
+    }
 })

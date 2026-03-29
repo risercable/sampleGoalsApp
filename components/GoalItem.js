@@ -1,7 +1,11 @@
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 
 const Item = ({ title, color, onDeleteItem }) => (
-    <Pressable onPress={onDeleteItem}>
+    <Pressable
+        android_ripple={{ color: '#210644'}}
+        onPress={onDeleteItem}
+        style={({pressed}) => pressed && styles.pressedItem}
+    >
         <View style={[styles.item, { backgroundColor: color }]}>
             <Text style={styles.title}>{title}</Text>
         </View>
@@ -21,6 +25,9 @@ const styles =  StyleSheet.create({
         marginVertical: 8,
         marginHorizontal: 0,
         borderRadius: 5
+    },
+    pressedItem: {
+        opacity: 0.5
     },
     title: {
         fontSize: 18,
